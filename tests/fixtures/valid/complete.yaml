@@ -1,0 +1,46 @@
+name: Complete
+version: 1.2.3
+schema: v1
+models:
+  - name: GPT-4o
+    provider: openai
+    model: gpt-4o
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      temperature: 0.7
+  - uses: anthropic/claude-3.5-sonnet
+    with:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    override:
+      roles:
+        - chat
+context:
+  - provider: file
+  - provider: code
+rules:
+  - Always be concise
+  - uses: sanity/sanity-opinionated
+prompts:
+  - name: check
+    description: Check code for mistakes
+    invokable: true
+    prompt: |
+      Please review the selected code and point out clear errors.
+docs:
+  - name: Continue
+    startUrl: https://docs.continue.dev/intro
+mcpServers:
+  - name: sqlite
+    command: uvx
+    args:
+      - mcp-server-sqlite
+      - --db-path
+      - /tmp/test.db
+data:
+  - name: Local Dev Data
+    destination: file:///Users/me/.continue/dev_data
+    schema: 0.2.0
+    level: all

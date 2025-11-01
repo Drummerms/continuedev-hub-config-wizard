@@ -1,0 +1,578 @@
+{
+  "$ref": "#/definitions/ContinueDevHubConfig",
+  "definitions": {
+    "ContinueDevHubConfig": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "schema": {
+          "type": "string",
+          "const": "v1"
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "apiBase": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "useLegacyCompletionsEndpoint": {
+                    "type": "boolean"
+                  },
+                  "roles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "chat",
+                        "autocomplete",
+                        "embed",
+                        "rerank",
+                        "edit",
+                        "apply",
+                        "summarize"
+                      ]
+                    },
+                    "default": [
+                      "chat",
+                      "edit",
+                      "apply",
+                      "summarize"
+                    ]
+                  },
+                  "capabilities": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "tool_use",
+                        "image_input"
+                      ]
+                    }
+                  },
+                  "maxStopWords": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "promptTemplates": {
+                    "type": "object",
+                    "properties": {
+                      "chat": {
+                        "type": "string"
+                      },
+                      "edit": {
+                        "type": "string"
+                      },
+                      "apply": {
+                        "type": "string"
+                      },
+                      "autocomplete": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "chatOptions": {
+                    "type": "object",
+                    "properties": {
+                      "baseSystemMessage": {
+                        "type": "string"
+                      },
+                      "baseAgentSystemMessage": {
+                        "type": "string"
+                      },
+                      "basePlanSystemMessage": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "embedOptions": {
+                    "type": "object",
+                    "properties": {
+                      "maxChunkSize": {
+                        "type": "integer",
+                        "minimum": 128
+                      },
+                      "maxBatchSize": {
+                        "type": "integer",
+                        "minimum": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "defaultCompletionOptions": {
+                    "type": "object",
+                    "properties": {
+                      "contextLength": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0
+                      },
+                      "maxTokens": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0
+                      },
+                      "temperature": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 2
+                      },
+                      "topP": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "topK": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "stop": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "reasoning": {
+                        "type": "boolean"
+                      },
+                      "reasoningBudgetTokens": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "requestOptions": {
+                    "type": "object",
+                    "properties": {
+                      "timeout": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0
+                      },
+                      "verifySsl": {
+                        "type": "boolean"
+                      },
+                      "caBundlePath": {
+                        "type": "string"
+                      },
+                      "proxy": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "headers": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "extraBodyProperties": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      },
+                      "noProxy": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "clientCertificate": {
+                        "type": "object",
+                        "properties": {
+                          "cert": {
+                            "type": "string"
+                          },
+                          "key": {
+                            "type": "string"
+                          },
+                          "passphrase": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "cert",
+                          "key"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "autocompleteOptions": {
+                    "type": "object",
+                    "properties": {
+                      "disable": {
+                        "type": "boolean"
+                      },
+                      "maxPromptTokens": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0
+                      },
+                      "debounceDelay": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "modelTimeout": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "maxSuffixPercentage": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "prefixPercentage": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "transform": {
+                        "type": "boolean"
+                      },
+                      "template": {
+                        "type": "string"
+                      },
+                      "onlyMyCode": {
+                        "type": "boolean"
+                      },
+                      "useCache": {
+                        "type": "boolean"
+                      },
+                      "useImports": {
+                        "type": "boolean"
+                      },
+                      "useRecentlyEdited": {
+                        "type": "boolean"
+                      },
+                      "useRecentlyOpened": {
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "name",
+                  "provider",
+                  "model"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "uses": {
+                    "type": "string"
+                  },
+                  "with": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  },
+                  "override": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/name"
+                      },
+                      "provider": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/provider"
+                      },
+                      "model": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/model"
+                      },
+                      "apiBase": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/apiBase"
+                      },
+                      "apiKey": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/apiKey"
+                      },
+                      "useLegacyCompletionsEndpoint": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/useLegacyCompletionsEndpoint"
+                      },
+                      "roles": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/roles"
+                      },
+                      "capabilities": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/capabilities"
+                      },
+                      "maxStopWords": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/maxStopWords"
+                      },
+                      "promptTemplates": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/promptTemplates"
+                      },
+                      "chatOptions": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/chatOptions"
+                      },
+                      "embedOptions": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/embedOptions"
+                      },
+                      "defaultCompletionOptions": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/defaultCompletionOptions"
+                      },
+                      "requestOptions": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/requestOptions"
+                      },
+                      "autocompleteOptions": {
+                        "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/autocompleteOptions"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "uses"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "context": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "file",
+                  "code",
+                  "diff",
+                  "http",
+                  "terminal",
+                  "open",
+                  "clipboard",
+                  "tree",
+                  "problems",
+                  "debugger",
+                  "repo-map",
+                  "currentFile",
+                  "os"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "params": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "provider"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "uses": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uses"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "prompts": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "prompt": {
+                    "type": "string"
+                  },
+                  "invokable": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "prompt"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "uses": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uses"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "docs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "startUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "favicon": {
+                "type": "string",
+                "format": "uri"
+              },
+              "useLocalCrawling": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "name",
+              "startUrl"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "mcpServers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "command": {
+                "type": "string"
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "env": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "cwd": {
+                "type": "string"
+              },
+              "requestOptions": {
+                "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/requestOptions"
+              },
+              "connectionTimeout": {
+                "type": "integer",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "name",
+              "command"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "destination": {
+                "type": "string"
+              },
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "0.1.0",
+                  "0.2.0"
+                ]
+              },
+              "events": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "level": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "noCode"
+                ],
+                "default": "all"
+              },
+              "apiKey": {
+                "type": "string"
+              },
+              "requestOptions": {
+                "$ref": "#/definitions/ContinueDevHubConfig/properties/models/items/anyOf/0/properties/requestOptions"
+              }
+            },
+            "required": [
+              "name",
+              "destination",
+              "schema"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "schema"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

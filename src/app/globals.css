@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --muted: 217 32% 17%;
+  --muted-foreground: 215 20% 65%;
+  --border: 217 32% 17%;
+  --input: 217 32% 17%;
+  --ring: 210 100% 65%;
+  --primary: 210 100% 65%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 217 32% 17%;
+  --secondary-foreground: 210 40% 98%;
+  --accent: 213 100% 80%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --card: 220 39% 12%;
+  --card-foreground: 210 40% 98%;
+  --popover: 220 39% 12%;
+  --popover-foreground: 210 40% 98%;
+  --radius: 0.75rem;
+}
+
+.light {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --muted: 213 27% 84%;
+  --muted-foreground: 215 20% 25%;
+  --border: 213 12% 84%;
+  --input: 213 12% 84%;
+  --ring: 215 100% 50%;
+  --primary: 215 100% 50%;
+  --primary-foreground: 222 47% 11%;
+  --secondary: 215 15% 84%;
+  --secondary-foreground: 222 47% 11%;
+  --accent: 215 100% 92%;
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 84% 50%;
+  --destructive-foreground: 210 40% 98%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --radius: 0.75rem;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.focus-ring {
+  @apply outline-none ring-2 ring-offset-2 ring-offset-background ring-ring;
+}

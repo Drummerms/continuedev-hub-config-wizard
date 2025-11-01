@@ -1,0 +1,11 @@
+name: Oops
+version: 0.0.1
+schema: v1
+fooBar: true
+models:
+  - name: bad
+    provider: openai
+    model: gpt-4o
+    capabilities:
+      - tool_use
+      - image_outputs
