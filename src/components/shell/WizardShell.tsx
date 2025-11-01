@@ -5,15 +5,20 @@ import { useMemo } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { FIELD_METADATA } from "@/lib/fieldMetadata";
+import { parseYaml } from "@/lib/yaml";
 import { validateConfig } from "@/lib/validation";
 import { useWizardStore } from "@/store/wizardStore";
 import { YamlPreview } from "@/components/wizard/YamlPreview";
+import { FormRenderer } from "@/components/form/FormRenderer";
+import { FORM_SECTIONS } from "@/lib/form/sectionRegistry";
 
 export function WizardShell(): JSX.Element {
   const { mode, setMode, config, yaml } = useWizardStore();
-  const validation = useMemo(() => validateConfig(config), [config]);
+  const parsed = useMemo(() => parseYaml(yaml), [yaml]);
+  const validation = useMemo(() => validateConfig(parsed.json), [parsed.json]);
   const issues = validation.errors ?? [];
+  const parseErrors = parsed.errors ?? [];
+  const parseWarnings = parsed.warnings ?? [];
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -43,13 +48,21 @@ export function WizardShell(): JSX.Element {
 
       <div className="flex flex-1 overflow-hidden">
         <aside className="hidden w-60 shrink-0 border-r border-border bg-muted/40 p-4 lg:block">
-          <p className="text-sm font-medium text-muted-foreground">Navigation</p>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li className="rounded-md bg-background px-3 py-2 text-foreground shadow-sm">
-              Form Sections
-            </li>
-            <li className="px-3 py-2">Block Palette</li>
-            <li className="px-3 py-2">Presets</li>
+          <p className="text-sm font-medium text-muted-foreground">Form Sections</p>
+          <ul className="mt-3 space-y-1 text-sm text-muted-foreground">
+            {FORM_SECTIONS.map((section) => (
+              <li
+                key={section.id}
+                className="rounded-md px-3 py-2 transition-colors hover:bg-background hover:text-foreground"
+              >
+                {section.title}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm font-medium text-muted-foreground">Other Panels</p>
+          <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+            <li className="rounded-md px-3 py-2 text-muted-foreground/80">Block Palette (coming soon)</li>
+            <li className="rounded-md px-3 py-2 text-muted-foreground/80">Presets Library</li>
           </ul>
         </aside>
 
@@ -60,21 +73,7 @@ export function WizardShell(): JSX.Element {
               <TabsTrigger value="blocks">Block Mode</TabsTrigger>
             </TabsList>
             <TabsContent value="form" className="p-6">
-              <section className="rounded-xl border border-dashed border-primary/50 bg-card/40 p-6 text-sm text-muted-foreground">
-                <h2 className="text-base font-semibold text-foreground">Form mode</h2>
-                <p className="mt-3 leading-relaxed">
-                  Dynamic form renderer derived from the Zod schema will appear here. Each section will
-                  include contextual documentation, validation, and example presets.
-                </p>
-                <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {FIELD_METADATA.map((section) => (
-                    <div key={section.path} className="rounded-lg border border-border bg-background/80 p-4">
-                      <p className="text-sm font-semibold text-foreground">{section.label}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">{section.description}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
+              <FormRenderer />
             </TabsContent>
             <TabsContent value="blocks" className="p-6">
               <section className="rounded-xl border border-dashed border-primary/50 bg-card/40 p-6 text-sm text-muted-foreground">
@@ -101,17 +100,37 @@ export function WizardShell(): JSX.Element {
             </header>
             <YamlPreview value={yaml} ariaLabel="Continue configuration YAML preview" />
             <footer className="text-xs text-muted-foreground">
-              {issues.length === 0 ? (
-                <span className="text-emerald-400">Configuration is valid.</span>
-              ) : (
+              {parseErrors.length > 0 ? (
+                <ul className="space-y-2">
+                  {parseErrors.map((error, index) => (
+                    <li key={`parse-${index}`} className="rounded border border-destructive/40 bg-destructive/10 p-2 text-destructive">
+                      <p className="font-semibold">YAML Parse Error</p>
+                      <p>{error.message}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : issues.length > 0 ? (
                 <ul className="space-y-2">
                   {issues.map((error, index) => (
-                    <li key={index} className="rounded border border-destructive/40 bg-destructive/10 p-2 text-destructive">
+                    <li key={`schema-${index}`} className="rounded border border-destructive/40 bg-destructive/10 p-2 text-destructive">
                       <p className="font-semibold">{error.instancePath || "root"}</p>
                       <p>{error.message}</p>
                     </li>
                   ))}
                 </ul>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-emerald-400">Configuration is valid.</p>
+                  {parseWarnings.length > 0 ? (
+                    <ul className="space-y-1 text-yellow-300">
+                      {parseWarnings.map((warning, index) => (
+                        <li key={`warn-${index}`}>
+                          YAML warning: {warning.message}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
               )}
             </footer>
           </div>
